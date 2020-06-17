@@ -1,6 +1,5 @@
 # hasura-remote-schema
-An attempt to demonstrate Hasura's irritating handling of offline remote schemas as invalid metadata. Please refer to [Issue #5117](https://github.com/hasura/graphql-engine/issues/5117) for more details.
-Executing `docker-compose up` will trigger the following sequence:
+An attempt to demonstrate Hasura's irritating handling of offline remote schemas as invalid metadata. Executing `docker-compose up` will trigger the following sequence:
 
  1. `postgres` starts and creates three databases: `parent`, `child1`, `child2`
  2. `hasura-parent` starts with two remote schemas: `hasura-child1` and `hasura-child2`
@@ -11,7 +10,7 @@ Executing `docker-compose up` will trigger the following sequence:
 
 There are two main problems here
 
- - `hasura-parent` should be able to start immediately despite one of the remote schemas being "offline". It's no different from being able to add remote schemas after initialization.
+ - `hasura-parent` should be able to start immediately despite one of the remote schemas being "offline" ([Issue #5117](https://github.com/hasura/graphql-engine/issues/5117)). It's no different from being able to add remote schemas after initialization.
  - Given the 60 seconds timeout value,`hasura-parent` should only restart 3 or 4 times ([Issue #5126](https://github.com/hasura/graphql-engine/issues/5126)). It restarts 10 times with this test:
 ```
 $ docker inspect --format "NAME: {{.Name}} RESTARTS: {{.RestartCount}}" $(docker ps -aq)
