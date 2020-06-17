@@ -1,4 +1,8 @@
-- name: remote-test
+- name: test
   definition:
-    url: http://hasura-child:8080/v1/graphql
+    url: http://hasura-child1:8080/v1/graphql
+    timeout_seconds: 60
+- name: test2
+  definition:
+    url: http://hasura-child2:8080/v1/graphql
     timeout_seconds: 60

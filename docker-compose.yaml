@@ -10,7 +10,7 @@ services:
   postgres:
     image: timescale/timescaledb:latest-pg12
     environment:
-      POSTGRES_MULTIPLE_DATABASES: parent,child
+      POSTGRES_MULTIPLE_DATABASES: parent,child1,child2
       POSTGRES_PASSWORD: postgrespassword
       TIMESCALEDB_TELEMETRY: "off"
     networks:
@@ -40,12 +40,12 @@ services:
       - ./hasura-parent/migrations:/hasura-migrations
       - ./hasura-parent/metadata:/hasura-metadata
 
-  hasura-child:
+  hasura-child1:
     image: hasura/graphql-engine:v1.3.0-beta.1.cli-migrations-v2
     depends_on:
-    - "postgres"
+    - hasura-parent
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/child
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/child1
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_ENABLE_TELEMETRY: "false"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
@@ -55,5 +55,23 @@ services:
     - "8081:8080"
     restart: always
     volumes:
-      - ./hasura-child/migrations:/hasura-migrations
-      - ./hasura-child/metadata:/hasura-metadata
+      - ./hasura-child1/migrations:/hasura-migrations
+      - ./hasura-child1/metadata:/hasura-metadata
+
+  hasura-child2:
+    image: hasura/graphql-engine:v1.3.0-beta.1.cli-migrations-v2
+    depends_on:
+    - hasura-parent
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/child2
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ENABLE_TELEMETRY: "false"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+    networks:
+      - test
+    ports:
+    - "8082:8080"
+    restart: always
+    volumes:
+      - ./hasura-child2/migrations:/hasura-migrations
+      - ./hasura-child2/metadata:/hasura-metadata
