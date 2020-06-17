@@ -1,8 +1,8 @@
-- name: test
+- name: hasura-child1
   definition:
     url: http://hasura-child1:8080/v1/graphql
     timeout_seconds: 60
-- name: test2
+- name: hasura-child2
   definition:
     url: http://hasura-child2:8080/v1/graphql
     timeout_seconds: 60
